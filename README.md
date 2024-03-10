@@ -15,13 +15,16 @@ Copyright (c) 2024 Madhanmaaz
 
 All rights owned by Madhanmaaz.
 
-The "white-spikes" tool is an educational resource designed for awareness-raising and ethical purposes only. It is free to use, but any commercial distribution or sale is restricted. The tool is intended to be used responsibly and with the explicit permission of the relevant network administrators or owners. The creators and copyright owners of "white-spikes" are not liable for any misuse or unauthorized use of the tool.
+The "white-spikes" tool is an educational resource designed for awareness-raising and ethical purposes only.
+It is free to use, but any commercial distribution or sale is restricted.
+The tool is intended to be used responsibly and with the explicit permission of the relevant network administrators or owners.
+The creators and copyright owners of "white-spikes" are not liable for any misuse or unauthorized use of the tool.
 
 For educational and awareness-raising purposes only. Unauthorized use is prohibited.
 ```
 
 ### DEMO VIDEO
-
+https://github.com/madhanmaaz/white-spikes/assets/120784875/ce15e65b-0d8a-4f49-baac-d04cc5464ef2
 
 ![banner](./public/assets/src/banner.jpg)
 
@@ -53,7 +56,12 @@ npm install
 
 - Run - The default port is `3411` 
 ```bash
-npm start
+npm run start
+```
+
+- To run in server 
+```bash
+npm run headless
 ```
 - `http://localhost:3411` Open on your browser 
 
@@ -80,7 +88,7 @@ npm start
 - `CREATOR`: Create the target instance.
 - `PANEL`: In version 2, there is a separate panel for each target.
 - `RESPONSE TO TARGET`: Custom response page.
-- `DOWNLOAD COOKIES` - Download cookies option, access account from another white-spikes application.
+- `DOWNLOAD COOKIES`: Download cookies option, access account from another white-spikes application.
 - `FORCE COOKIES`: When the hijack is complete, you can force the cookies to save properly.
 - `SCREENSHOT`: Screenshot for a headless browser.
-- `OPEN BROWSER WITH COOKIES` Here you can upload your cookie file, **target-id.wszip**.
+- `OPEN BROWSER WITH COOKIES`: Here you can upload your cookie file, **target-id.wszip**.

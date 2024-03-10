@@ -1,2 +1,5 @@
 node_modules
-ssd/books
+ssd/cookies
+ssd/targets
+public/web_public
+*.traineddata

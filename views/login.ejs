@@ -3,29 +3,70 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>White Spikes LOGIN | Pishing Tool</title>
-    <link rel="stylesheet" href="./assets/css/main.css">
-    <link rel="stylesheet" href="./assets/css/login.css">
-    <script>
-        const url = localStorage.getItem('url')
-        if (url !== null) {
-            location.href = url
+    <title>Login | WHITE SPIKES</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <style>
+        form {
+            top: 0;
+            position: absolute;
+            left: 0;
+            width: 300px;
+            background: rgb(0, 0, 0, 0.6);
+            height: 100%;
+            padding: .5rem;
+            color: #e5e5e5;
         }
-    </script>
+
+        .box-inp {
+            width: 100%;
+        }
+
+        input[type="submit"] {
+            background: #7a7a7a;
+        }
+
+        input[type="submit"]:hover {
+            background: linear-gradient(to right, #ff3600, #d00000);
+            cursor: pointer;
+        }
+
+        p {
+            text-align: center;
+        }
+
+        @media(max-width: 400px) {
+            form {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 
 <body>
+    <video id="video-background" autoplay muted loop>
+        <source src="/assets/src/bg.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
 
-    <form class="login" action="/" method="POST">
-        <h2>White Spikes login</h2>
-        <input type="password" name="username" placeholder="U53RN4M3" required>
-        <input type="password" name="password" placeholder="9455W0RD" required>
-        <input type="submit">
-        <p>the world's No.1 Phishing tool. created by <a href="https://github.com/madhanmaaz">madhan</a></p>
+    <form action="/" method="post">
+        <h2 class="main-t">WHITE SPIKES LOGIN</h2>
+        <div class="box-inp">
+            <input type="password" placeholder="Username" name="username" required>
+        </div>
+        <div class="box-inp">
+            <input type="password" placeholder="Password" name="password" required>
+        </div>
+        <div class="box-inp">
+            <input type="submit" value="LOGIN">
+        </div>
+        <p>
+            This tool was created by
+            <a style="color: #00ff62;" href="https://madhanmaaz.netlify.app/">
+                madhanmaaz (madhanHacker)
+            </a>
+        </p>
     </form>
-
 </body>
 
 </html>

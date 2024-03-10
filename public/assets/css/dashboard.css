@@ -1,0 +1,136 @@
+body {
+    background: #000020;
+}
+
+.main-content {
+    padding: .5rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.main-content .targets-header {
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .5rem;
+}
+
+.main-content .targets-content {
+    backdrop-filter: blur(15px);
+    padding: .5rem;
+    flex-grow: 1;
+    height: 1vh;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.main-content .targets-content .target {
+    background: rgba(255, 255, 255, 0.15);
+    padding: .5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-left: 3px solid rgba(255, 255, 255, 0.3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.main-content .targets-content .target.hijacked {
+    border-left-color: #ff3300;
+}
+
+.main-content .targets-content .target.pending {
+    border-left-color: #fffb00;
+}
+
+.main-content .targets-content .target pre b {
+    font-weight: 500;
+}
+
+/* settings-container */
+.settings-container {
+    width: 350px;
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* creator-container */
+.creator-container {
+    width: 50%;
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.creator-container .create-btn {
+    padding: .5rem;
+    border-radius: 7px;
+    background: #0077b6;
+    color: #e5e5e5;
+    text-transform: uppercase;
+    font-size: 1rem;
+    width: 200px;
+}
+
+.creator-container pre {
+    background: #111;
+    padding: .5rem;
+    border-radius: 7px;
+    margin-top: .5rem;
+}
+
+.creator-container select::-webkit-scrollbar {
+    background: #000000;
+}
+
+.creator-container .app-description {
+    background: var(--secondary-bg);
+    padding: .5rem;
+    border-radius: 7px;
+    margin-top: .5rem;
+}
+
+.creator-container .app-description b {
+    color: #00a6ff;
+}
+
+.information-container {
+    width: 100%;
+    max-width: 500px;
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.information-container .content th {
+    color: aqua;
+    text-transform: uppercase;
+    text-align: left;
+}
+
+.information-container .content h4 {
+    margin: .3rem .2rem;
+}
+
+.information-container .content table th,
+.information-container .content table td {
+    padding: 0 .4rem;
+}
+
+.information-container .content .con a {
+    margin: .4rem;
+    display: inline-block;
+}
+
+@media(max-width: 700px) {
+    .creator-container {
+        width: 100%;
+    }
+}
+
+@media(max-width: 500px) {
+    .main-content .targets-content .target {
+        flex-direction: column;
+        gap: .5rem;
+    }
+
+    .settings-container {
+        width: 100%;
+    }
+}

